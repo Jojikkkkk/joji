@@ -1,0 +1,58 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+// Pseudo Random Number Generator
+// sequence generator.
+// C++     functor
+class seq {
+private:
+  int x;
+public:
+
+  seq(int initial) : x{ initial } {}
+
+  int operator()  () {
+    //x = (7 * x + 1) % 11;
+    //x = (3 * x + 2) % 13;
+    x = (17 * x + 345) % 12655;  // 0..12654
+    return x;
+  }
+};
+
+
+
+vector<int> GetSequence( seq& generator)
+{
+  vector<int> nums;        // nums is empty
+  for (;;)                 // forever loop
+  {
+    int n = generator();   // generate a number
+    auto  it = find(begin(nums), end(nums), n);
+    if (end(nums) == it)   // n is not in the list
+      nums.push_back(n);   // add n to the sequence list
+    else                   // n is already in the list, so
+      break;               // we are repeating, leave
+  }
+  return nums;
+}
+
+
+
+int main()
+{
+    std::cout << "Sequence  World!\n";
+
+    seq s(1);   // initial value for sequence
+    vector<int> data;
+    data = GetSequence(s);
+
+    cout << " your sequence is: " << data.size() << endl;
+    for (auto x : data)
+      cout << x << ',';
+
+    return 0;
+}
+
+//x = (3 * x + 2) % 13;

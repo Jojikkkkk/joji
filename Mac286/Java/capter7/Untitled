@@ -1,0 +1,74 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+// Pseudo Random Number Generator
+// sequence generator.
+// C++     functor
+class seq {
+private:
+  int x;
+public:
+
+  seq(int initial) : x{ initial } {}
+
+  int operator()  () {
+    //x = (7 * x + 1) % 11;
+    //x = (3 * x + 2) % 13;
+    // recusive expression
+    x = (17 * x + 345) % 12655;  // 0..12654
+    return x;
+  }
+};
+
+
+
+vector<int> GetSequence( seq& generator)
+{
+  vector<int> nums;        // nums is empty
+  for (;;)                 // forever loop
+  {
+    int n = generator();   // generate a number
+    auto  it = find(begin(nums), end(nums), n);
+    if (end(nums) == it)   // n is not in the list
+      nums.push_back(n);   // add n to the sequence list
+    else                   // n is already in the list, so
+      break;               // we are repeating, leave
+  }
+  return nums;
+}
+
+// lab ....
+
+int main()
+{
+    std::cout << "affine sequence....  World!\n";
+
+    vector<int> data{ 2, 3, 56, 77, 88 };  // clear text
+    vector<int> secret;                    // now a secret
+    vector<int> msg;                       // reverse secret here
+
+    // lambda expression aka anonymous function
+    auto encode= [](int d) { return (13 * d + 345) %  35; };
+
+    for (auto d : data)
+      secret.push_back(encode(d));
+
+    cout << " your sequence is: " << secret.size() << endl;
+    for (auto x : secret)
+      cout << x << ',';
+
+    auto decode = [](int d) { return (13 * d - 345) % 35; };
+
+    for (auto s : secret)
+      msg.push_back(decode(s));
+
+    cout << " your secret was: " << msg.size() << endl;
+    for (auto x : msg)
+      cout << x << ',';
+
+    return 0;
+}
+
+//x = (3 * x + 2) % 13;
